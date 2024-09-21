@@ -1,6 +1,1 @@
-
-
-
-export type StoryType { 
-    
-} 
+export type StoryType = Array<string>;

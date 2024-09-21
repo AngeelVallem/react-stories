@@ -1,24 +1,13 @@
-import { createContext, Dispatch, useContext, useEffect, useReducer } from "react";
+import { createContext, Dispatch, useReducer } from "react";
+import type { StoryType } from "../types";
 
 enum Actions {
-  SAVE_STORIES = "SAVE_STORIES",
-  SAVE_STEPS = "SAVE_STEPS",
   TOGGLE_MUTE = "TOGGLE_MUTE",
-}
-
-interface SaveVideosAction {
-  type: Actions.SAVE_STORIES;
-  payload: { videoUrl: string }; // ejemplo de un payload
 }
 
 interface ToggleMuteAction {
   type: Actions.TOGGLE_MUTE;
   payload: { mute: boolean };
-}
-
-interface SaveStepsAction {
-  type: Actions.SAVE_STEPS;
-  payload: { steps: number };
 }
 
 interface IStoriesState {
@@ -27,30 +16,24 @@ interface IStoriesState {
   muted: boolean;
 }
 
-type StoriesActions = SaveVideosAction | ToggleMuteAction | SaveStepsAction;
-
-const initState: IStoriesState = {
-  stories: [],
-  steps: 0,
-  muted: false,
-};
+type StoriesActions = ToggleMuteAction;
 
 interface IStoriesContext {
   state: IStoriesState;
   dispatch: Dispatch<StoriesActions>;
 }
 
-export const StoriesContext = createContext<IStoriesContext | undefined>(
-  undefined
-);
+export const StoriesContext = createContext<IStoriesContext>({
+  state: {
+    stories: [],
+    steps: 0,
+    muted: false,
+  },
+  dispatch: () => null,
+});
 
 function reducer(state: IStoriesState, action: StoriesActions): IStoriesState {
   switch (action.type) {
-    case Actions.SAVE_STORIES:
-      return {
-        ...state,
-        stories: [...state.stories, action.payload.videoUrl],
-      };
     case Actions.TOGGLE_MUTE:
       return {
         ...state,
@@ -61,14 +44,17 @@ function reducer(state: IStoriesState, action: StoriesActions): IStoriesState {
   }
 }
 
-
-interface StoriesProviderProps { 
-    children: React.ReactNode
-    stories: StoriesType
+interface StoriesProviderProps {
+  children: React.ReactNode;
+  stories: StoryType;
 }
 
-export function StoriesPovider({ children, }: { children: React.ReactNode,}) {
-  const [storiesState, dispatch] = useReducer(reducer, initState);
+export function StoriesPovider({ children, stories }: StoriesProviderProps) {
+  const [storiesState, dispatch] = useReducer(reducer, {
+    stories: stories,
+    steps: stories.length,
+    muted: true,
+  });
 
   return (
     <StoriesContext.Provider
@@ -80,25 +66,4 @@ export function StoriesPovider({ children, }: { children: React.ReactNode,}) {
       {children}
     </StoriesContext.Provider>
   );
-}
-
-export function useStore() {
-  
-
-
-
-}
-
-
-export function useStoriesState(){
-    const context = useContext(StoriesContext);
-
-
-
-    useEffect(() => {
-
-    },[])
-
-
-    return context?.state
 }

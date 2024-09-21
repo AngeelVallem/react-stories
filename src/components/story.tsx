@@ -1,25 +1,24 @@
-import { useCallback, useRef } from "react";
+import { memo, useCallback, useEffect, useRef } from "react";
 import styles from "./video.module.css";
 import TimeElapsed from "./time-elapsed";
 import Controls from "./controls";
+import useVideoContext from "../tools/video/use-video-context";
 
 interface IHistoryProps {
   videoUrl: string;
+  step: number;
 }
 
-function Story({ videoUrl }: IHistoryProps) {
-  const ref: React.LegacyRef<HTMLVideoElement> | undefined = useRef(null);
+function Story({ videoUrl, step }: IHistoryProps) {
+  const ref = useVideoContext();
 
-  const getVideo = useCallback(() => {
-    return ref.current;
-  }, [ref]);
+  console.log(step);
 
   return (
     <>
       <div className={styles.video_container}>
         <div className={styles.video_time_wrapper}>
-          <TimeElapsed getVideo={getVideo} />
-          <Controls getVideo={getVideo} />
+          <Controls />
         </div>
 
         <video ref={ref} className={styles.video}>
@@ -31,4 +30,4 @@ function Story({ videoUrl }: IHistoryProps) {
   );
 }
 
-export default Story;
+export default memo(Story);

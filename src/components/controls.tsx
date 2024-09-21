@@ -1,31 +1,28 @@
 import { useEffect, useState } from "react";
 
 import styles from "./video.module.css";
+import useVideoContext from "../tools/video/use-video-context";
 
-interface ControlsProps {
-  getVideo: () => HTMLVideoElement | null;
-}
-
-function Controls({ getVideo }: ControlsProps) {
+function Controls() {
   const [muted, setMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-
+  const video = useVideoContext();
   const [isVideoReady, setIsVideoReady] = useState(false);
-  const video = getVideo();
+  const _video = video?.current;
+  console.log(video);
 
   useEffect(() => {
-    const _video = getVideo();
-    _video?.addEventListener("loadedmetadata", (e) => {
-      if (_video) {
+    _video?.addEventListener("loadedmetadata", () => {
+      if (video) {
         setIsVideoReady(true);
       }
     });
 
     _video?.addEventListener("play", () => setIsPlaying(true));
     _video?.addEventListener("pause", () => setIsPlaying(false));
-  }, [getVideo]);
+  }, [video, _video]);
 
-  if (!isVideoReady || !video) {
+  if (!video) {
     return null;
   }
 
