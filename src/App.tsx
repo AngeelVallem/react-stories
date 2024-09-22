@@ -6,7 +6,7 @@ import video1 from "./assets/video.mp4";
 function App() {
   return (
     <main>
-      <h1>React History</h1>
+      <h1>React Stories</h1>
 
       <Stories stories={[video, video1]} />
     </main>

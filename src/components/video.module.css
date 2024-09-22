@@ -1,18 +1,18 @@
 .story_wrapper {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
-
 
 .video_container {
-    width: 500px;
-    height: 700px;
-    border-radius: 10px;
-    position: relative;
-    overflow: hidden;
+  width: 500px;
+  height: 700px;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  margin: 0px 50px;
 }
-
 
 .video {
   display: block;

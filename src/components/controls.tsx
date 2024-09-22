@@ -8,40 +8,40 @@ function Controls() {
   const [isPlaying, setIsPlaying] = useState(false);
   const video = useVideoContext();
   const [isVideoReady, setIsVideoReady] = useState(false);
-  const _video = video?.current;
-  console.log(video);
+  
 
-  useEffect(() => {
-    _video?.addEventListener("loadedmetadata", () => {
-      if (video) {
-        setIsVideoReady(true);
-      }
-    });
+  // useEffect(() => {
+  
+  //   _video?.addEventListener("loadedmetadata", (e) => {
+  //     if (_video) {
+  //       setIsVideoReady(true);
+  //     }
+  //   });
 
-    _video?.addEventListener("play", () => setIsPlaying(true));
-    _video?.addEventListener("pause", () => setIsPlaying(false));
-  }, [video, _video]);
+  //   _video?.addEventListener("play", () => setIsPlaying(true));
+  //   _video?.addEventListener("pause", () => setIsPlaying(false));
+  // }, [getVideo]);
 
-  if (!video) {
-    return null;
-  }
+  // if (!isVideoReady || !video) {
+  //   return null;
+  // }
 
-  const onPlay = () => {
-    video.play();
-  };
+  // const onPlay = () => {
+  //   video.play();
+  // };
 
-  const onPause = () => {
-    video.pause();
-  };
+  // const onPause = () => {
+  //   video.pause();
+  // };
 
-  const togglePlaying = () => {
-    if (isPlaying) {
-      onPause();
-      return;
-    }
+  // const togglePlaying = () => {
+  //   if (isPlaying) {
+  //     onPause();
+  //     return;
+  //   }
 
-    onPlay();
-  };
+  //   onPlay();
+  // };
 
   return (
     <div
@@ -54,7 +54,6 @@ function Controls() {
     >
       <button
         type="button"
-        onClick={() => togglePlaying()}
         className={styles.video_control_action_btn}
       >
         {isPlaying ? (
