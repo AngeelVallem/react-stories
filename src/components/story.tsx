@@ -1,15 +1,28 @@
-import { memo, ReactNode, useCallback, useRef } from "react";
+import { memo, ReactNode, useMemo } from "react";
 import styles from "./video.module.css";
-import TimeElapsed from "./time-elapsed";
-import Controls from "./controls";
-import useVideoContext from "../tools/video/use-video-context";
+import { useStoriesState } from "../store/useStoriesState";
+import { VideoContextProvider } from "../tools/video/video-context";
+import Source from "./source";
 
 interface IHistoryProps {
   children?: ReactNode;
 }
 
 function Story({ children }: IHistoryProps) {
-  return <div className={styles.video_container}>{children}</div>;
+  const { stories, currentStep } = useStoriesState();
+
+  return (
+    <div className={styles.video_container}>
+      {children}
+
+      <VideoContextProvider>
+        <Source
+          source={stories[currentStep - 1]}
+          key={stories[currentStep - 1]}
+        />
+      </VideoContextProvider>
+    </div>
+  );
 }
 
-export default memo(Story);
+export default Story;

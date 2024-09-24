@@ -19,10 +19,10 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+
 }
 
 .video_time_line {
-  width: 100%;
   height: 4px;
   border-radius: 50px;
   overflow: hidden;
@@ -38,6 +38,8 @@
   position: absolute;
   border-radius: 4px;
   padding: 10px;
+  display: flex;
+  gap: 10px;
 }
 
 .video_control_action_btn {
