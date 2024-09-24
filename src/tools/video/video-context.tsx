@@ -1,15 +1,16 @@
-import { createContext, createRef, ReactNode, useState } from "react";
-
-export const VideoContext =
-  createContext<React.RefObject<HTMLVideoElement> | null>(null);
-
-const videoRef = createRef<HTMLVideoElement>();
+import { createContext, ReactNode, useState } from "react";
+interface IVideoContext {
+  refs: Map<any, any>;
+  setRefs: React.Dispatch<React.SetStateAction<Map<any, any>>>;
+}
+export const VideoContext = createContext<IVideoContext | null>(null);
 
 export const VideoContextProvider = ({ children }: { children: ReactNode }) => {
-  const [refs, setRefs] = useState([]);
+  const [refs, setRefs] = useState(new Map());
 
   return (
-    <VideoContext.Provider value={videoRef}>{children}</VideoContext.Provider>
+    <VideoContext.Provider value={{ refs, setRefs }}>
+      {children}
+    </VideoContext.Provider>
   );
 };
-0;

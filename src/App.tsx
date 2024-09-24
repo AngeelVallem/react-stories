@@ -8,7 +8,7 @@ function App() {
     <main>
       <h1>React Stories</h1>
 
-      <Stories stories={[video, video1]} />
+      <Stories stories={[video, video1, video]} />
     </main>
   );
 }

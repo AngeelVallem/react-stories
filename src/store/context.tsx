@@ -21,7 +21,7 @@ interface PrevStepAction {
 }
 
 interface IStoriesState {
-  stories: Array<string>;
+  stories: Array<StoryType>;
   steps: number;
   currentStep: number;
   muted: boolean;
@@ -84,12 +84,14 @@ function reducer(state: IStoriesState, action: StoriesActions): IStoriesState {
 
 interface StoriesProviderProps {
   children: React.ReactNode;
-  stories: StoryType;
+  stories: Array<string>;
 }
 
 export function StoriesPovider({ children, stories }: StoriesProviderProps) {
   const [storiesState, dispatch] = useReducer(reducer, {
-    stories: stories,
+    stories: stories.map((s, i) => {
+      return { source: s, id: i };
+    }),
     steps: stories.length,
     currentStep: 1,
     muted: true,

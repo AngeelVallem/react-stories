@@ -1,1 +1,4 @@
-export type StoryType = Array<string>;
+export type StoryType = {
+  source: string;
+  id: number;
+};
