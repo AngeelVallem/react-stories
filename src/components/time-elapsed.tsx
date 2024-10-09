@@ -1,34 +1,59 @@
 import { memo, useEffect, useState } from "react";
 import styles from "./video.module.css";
 import { useStoriesState } from "../store/useStoriesState";
+import useVideoContext from "../tools/video/use-video-context";
+import Controls from "./controls";
 
 function TimeElapsed() {
   const [percent, setPercent] = useState(0);
   const { steps, currentStep, stories } = useStoriesState();
   const arr = Array.from(Array(steps), (_, x) => x);
-
-  // useEffect(() => {
-  //   console.log(videoPlaying);
-  //   if (videoPlaying instanceof HTMLVideoElement) {
-  //     const handleTimeUpdate = () => {
-  //       console.log("hello");
-  //       const currentTime = videoPlaying.currentTime;
-  //       const duration = videoPlaying.duration;
-  //       const percentPlayed = (currentTime / duration) * 100;
-  //       setPercent(percentPlayed);
-  //     };
-
-  //     videoPlaying.addEventListener("timeupdate", handleTimeUpdate);
-
-  //     return () => {
-  //       videoPlaying.removeEventListener("timeupdate", handleTimeUpdate);
-  //     };
-  //   }
-  // }, [videoPlaying]);
-
   const sizeLen = stories[currentStep - 1].id > currentStep - 1;
+  const { refs } = useVideoContext();
+  const currentVideo: HTMLVideoElement = refs.get(currentStep);
 
-  console.log(sizeLen);
+  useEffect(() => {
+    if (currentVideo) {
+      setPercent(0);
+
+      const handleTimeUpdate = () => {
+        const currentTime = currentVideo.currentTime;
+        const duration = currentVideo.duration || 1; // Evitar división por cero
+        const newPercent = (currentTime / duration) * 100;
+        setPercent(newPercent);
+      };
+
+      currentVideo.addEventListener("timeupdate", handleTimeUpdate);
+
+      // Limpieza del event listener
+      return () => {
+        currentVideo.removeEventListener("timeupdate", handleTimeUpdate);
+      };
+    }
+  }, [currentVideo]);
+
+  const takePercent = (key: number, percent: number) => {
+    const currentIndex = currentStep - 1;
+
+    // ACTIVE
+    if (key === currentIndex) {
+      // console.log(key, percent);
+      return `${percent}%`;
+    }
+
+    // DONE
+    if (key < currentIndex) {
+      return "100%";
+    }
+
+    // WAITING
+    if (key > currentIndex) {
+      return "0%";
+    }
+
+    return "0%";
+  };
+
   return (
     <div className={styles.video_time_wrapper}>
       {arr.map((_, key) => (
@@ -39,7 +64,7 @@ function TimeElapsed() {
         >
           <div
             style={{
-              width: `${key < currentStep - 1 ? 100 : percent}%`,
+              width: takePercent(key, percent),
               height: "100%",
               backgroundColor: "#ffffffeb",
             }}
@@ -47,7 +72,7 @@ function TimeElapsed() {
         </div>
       ))}
 
-      {/* <Controls /> */}
+      <Controls />
     </div>
   );
 }

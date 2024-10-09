@@ -13,9 +13,8 @@ function Story({ children }: IHistoryProps) {
 
   return (
     <div className={styles.video_container}>
-      {children}
-
       <VideoContextProvider>
+        {children}
         <Source
           source={stories[currentStep - 1].source}
           key={currentStep - 1}

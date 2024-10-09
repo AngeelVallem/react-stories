@@ -2,46 +2,49 @@ import { useEffect, useState } from "react";
 
 import styles from "./video.module.css";
 import useVideoContext from "../tools/video/use-video-context";
+import { useStoriesState } from "../store/useStoriesState";
 
 function Controls() {
   const [muted, setMuted] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-  const video = useVideoContext();
+  const { currentStep } = useStoriesState();
+  const { refs } = useVideoContext();
   const [isVideoReady, setIsVideoReady] = useState(false);
-  
+  const video = refs.get(currentStep);
 
-  // useEffect(() => {
-  
-  //   _video?.addEventListener("loadedmetadata", (e) => {
-  //     if (_video) {
-  //       setIsVideoReady(true);
-  //     }
-  //   });
+  useEffect(() => {
+    if (video) {
+      video.addEventListener("loadedmetadata", () => {
+        if (video) {
+          setIsVideoReady(true);
+        }
+      });
 
-  //   _video?.addEventListener("play", () => setIsPlaying(true));
-  //   _video?.addEventListener("pause", () => setIsPlaying(false));
-  // }, [getVideo]);
+      video.addEventListener("play", () => setIsPlaying(true));
+      video.addEventListener("pause", () => setIsPlaying(false));
+    }
+  }, [video]);
 
-  // if (!isVideoReady || !video) {
-  //   return null;
-  // }
+  if (!isVideoReady || !video) {
+    return null;
+  }
 
-  // const onPlay = () => {
-  //   video.play();
-  // };
+  const onPlay = () => {
+    video.play();
+  };
 
-  // const onPause = () => {
-  //   video.pause();
-  // };
+  const onPause = () => {
+    video.pause();
+  };
 
-  // const togglePlaying = () => {
-  //   if (isPlaying) {
-  //     onPause();
-  //     return;
-  //   }
+  const togglePlaying = () => {
+    if (isPlaying) {
+      onPause();
+      return;
+    }
 
-  //   onPlay();
-  // };
+    onPlay();
+  };
 
   return (
     <div
@@ -55,6 +58,7 @@ function Controls() {
       <button
         type="button"
         className={styles.video_control_action_btn}
+        onClick={togglePlaying}
       >
         {isPlaying ? (
           <svg
